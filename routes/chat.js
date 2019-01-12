@@ -10,7 +10,7 @@ var newDate = new Date();
 var time = newDate.toFormat('YYYY년 MM월 DD일 HH24:MI 현재:')
 /* GET home page. */
 router.post('/', function(req, res, next) {
-    console.log(req.body); 
+    //console.log(req.body); 
     console.log(time);
     var action = req.body.queryResult.action;
     if(action == 'stock_info'){
