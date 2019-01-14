@@ -2,6 +2,7 @@ from __future__ import print_function
 import time
 import requests
 import lxml.html
+import sqlite3
 import re
 from textrankr import TextRank
 import json
@@ -46,6 +47,17 @@ for i in range(len(articles)):
     raw_content=articles[i]['content']
     summarized_content = TextRank(raw_content).summarize()
     articles[i]= (articles[i]['title'],summarized_content)
-
+conn = sqlite3.connect('C:\\Users\\q\\OneDrive - kaist.ac.kr\\KAIST\\2018_winter\\madcamp\\projects\\project3\\MadStock-server\\Server\\res\\articles.db')
+cursor = conn.cursor()
+select_sql = 'select * from articles'
+delete_sql = 'delete from articles'
+cursor.execute(select_sql)
+cursor.execute(delete_sql)
+sql = 'INSERT INTO articles VALUES (?, ?)'
+for i in range(len(articles)):
+    cursor.execute(sql, articles[i])
+conn.commit()
+cursor.close()
+conn.close()
 print('@@@@@@@@@@@@@@@@@@')
 print(articles)
