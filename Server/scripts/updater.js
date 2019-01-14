@@ -11,6 +11,16 @@ function updater(){
   console.log('Last Update: '+data);
   if(serverTime != data){
     console.log('we need to update');
+    const scriptPath = path.resolve('scripts', 'article_scraper.py');
+    pyShell = require('python-shell');
+    pyShell.PythonShell.run(scriptPath, null, function(err, results){
+      if(err) throw err;
+      else {
+        console.log('update done!');
+        fs.writeFileSync(timePath, serverTime, 'utf8');
+      }
+    })
+
   }
   else{
     console.log('no need to update');

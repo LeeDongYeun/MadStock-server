@@ -149,7 +149,7 @@ router.post('/', function(req, res, next) {
                 return console.error(err.message);
             }
             else{
-                var outString = '<증권 최신뉴스 Top4를 요약해서 알려드립니다>\n\n';
+                var outString = '<증권 최신뉴스 Top3를 요약해서 알려드립니다>\n\n';
                 var i =1;
                 rows.forEach((row) => {
                     outString += "====================\n"
