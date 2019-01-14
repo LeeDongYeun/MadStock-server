@@ -1,7 +1,8 @@
 import sqlite3
 
 def InsertDataBase(code, data, table):
-    conn = sqlite3.connect("stocksUTf.db")
+    conn = sqlite3.connect("../Server/res/stocksUTf.db")
+    #conn = sqlite3.connect("stocksUTf.db")
     cur = conn.cursor()
 
     cur.execute('CREATE table if not exists ' + table + ' (code text, open integer, close integer, high integer, low integer, volume integer);')

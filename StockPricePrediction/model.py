@@ -32,10 +32,21 @@ except OSError as e:
 df = pd.read_csv('data/' + code + '.csv')
 df = df.loc[:, ['Date', 'Open', 'High', 'Low', 'Close', 'Volume']]
 
-mean = [df['Open'].mean(), df['High'].mean(), df['Low'].mean(), df['Close'].mean(), df['Volume'].mean()]
-std = [df['Open'].std(), df['High'].std(), df['Low'].std(), df['Close'].std(), df['Volume'].std()]
-print(mean)
-print(std)
+lastData = []
+lastData.append(df.iloc[-1, 1])
+lastData.append(df.iloc[-1, 2])
+lastData.append(df.iloc[-1, 3])
+lastData.append(df.iloc[-1, 4])
+lastData.append(df.iloc[-1, 5])
+
+print(lastData)
+
+minimum = [df['Open'].min(), df['High'].min(), df['Low'].min(), df['Close'].min(), df['Volume'].min()]
+maximum = [df['Open'].max(), df['High'].max(), df['Low'].max(), df['Close'].max(), df['Volume'].max()]
+
+print(minimum)
+print(maximum)
+
 
 
     
@@ -92,8 +103,6 @@ def load_data(stock, seq_len):
 
     data = np.array(data);
     last_data = np.array([data[-1][1:, :]])
-
-
 
     valid_set_size = int(np.round(valid_set_size_percentage / 100 * data.shape[0]));
     test_set_size = int(np.round(test_set_size_percentage / 100 * data.shape[0]));
@@ -212,14 +221,14 @@ stacked_rnn_outputs = tf.reshape(rnn_outputs, [-1, n_neurons])
 stacked_outputs = tf.layers.dense(stacked_rnn_outputs, n_outputs)
 outputs = tf.reshape(stacked_outputs, [-1, n_steps, n_outputs], name="outputs")
 outputs = outputs[:, n_steps - 1, :]  # keep only last output of sequence
-print(outputs)
+#print(outputs)
 
 loss = tf.reduce_mean(tf.square(outputs - y), name="loss")  # loss function = mean squared error
-print(loss)
+#print(loss)
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate, name="optimizer")
-print(optimizer)
+#print(optimizer)
 training_op = optimizer.minimize(loss,  name="training_op")
-print(training_op)
+#print(training_op)
 
 # run graph
 with tf.Session() as sess:
@@ -243,11 +252,11 @@ with tf.Session() as sess:
     y_real_prediction = sess.run(outputs, feed_dict={X: prediction_data})
 
     saver.save(sess, directoryName + './' + code)
-
+'''
 ft = 0 # 0 = open, 1 = close, 2 = highest, 3 = lowest
 
 ## show predictions
-'''
+
 plt.figure(figsize=(15, 5));
 plt.subplot(1,2,1);
 
@@ -290,6 +299,8 @@ plt.legend(loc='best');
 plt.show()
 '''
 
+
+'''
 corr_price_development_train = np.sum(np.equal(np.sign(y_train[:,3]-y_train[:,0]),
             np.sign(y_train_pred[:,3]-y_train_pred[:,0])).astype(int)) / y_train.shape[0]
 corr_price_development_valid = np.sum(np.equal(np.sign(y_valid[:,3]-y_valid[:,0]),
@@ -300,12 +311,17 @@ corr_price_development_test = np.sum(np.equal(np.sign(y_test[:,3]-y_test[:,0]),
 print('correct sign prediction for close - open price for train/valid/test: %.2f/%.2f/%.2f'%(
     corr_price_development_train, corr_price_development_valid, corr_price_development_test))
 
-
-print(y_real_prediction[-1])
+'''
+#print(y_test[-1])
+#print(y_real_prediction[-2])
+#print(df_stock.iloc[-2, :])
+#print(y_real_prediction[-1])
+#print(df_stock.iloc[-1, :])
 result = []
 
 for i in range(5):
-    result.append(y_real_prediction[-1, i] * std[i] + mean[i])
-
+    result.append((maximum[i]-minimum[i]) * y_real_prediction[-1, i] + minimum[i])
 print(result)
+
+#plt.show()
 InsertDataBase.InsertDataBase(code, result, 'prediction')
