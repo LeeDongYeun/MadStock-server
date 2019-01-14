@@ -2,6 +2,7 @@ from __future__ import print_function
 import time
 import requests
 import lxml.html
+import sqlite3
 import re
 from textrankr import TextRank
 import json
@@ -46,6 +47,13 @@ for i in range(len(articles)):
     raw_content=articles[i]['content']
     summarized_content = TextRank(raw_content).summarize()
     articles[i]= (articles[i]['title'],summarized_content)
-
+conn = sqlite3.connect('..\\res\\articles.db')
+cursor = conn.cursor()
+sql = 'INSERT INTO articles VALUES (?, ?)'
+for i in range(len(articles)):
+    cursor.execute(sql, articles[i])
+conn.commit()
+cursor.close()
+conn.close()
 print('@@@@@@@@@@@@@@@@@@')
 print(articles)
