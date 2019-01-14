@@ -21,12 +21,14 @@
     "google-stocks": "^2.0.1",
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
+    "node-wget": "^0.4.3",
     "papaparse": "^4.6.3",
     "python-shell": "^1.0.7",
     "request": "^2.88.0",
     "sanitize-html": "^1.20.0",
     "sqlite3": "^4.0.6",
     "urlencode": "^1.1.0",
+    "wget": "0.0.1",
     "yahoo-finance": "^0.3.6",
     "yahoo-stock-prices": "^1.0.0"
   }

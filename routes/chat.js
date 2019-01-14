@@ -65,6 +65,9 @@ router.post('/', function(req, res, next) {
                             point = '지수는 ';
                             sunit = '포인트' ;
                         }
+                        if(market.indexOf("환율") != -1){
+                            point = '값은 '
+                        }
                         res.json({  "fulfillmentText": time+'\n'+market+"의 "+point+arr[0]+sunit+"입니다.",
                         "fulfillmentMessages": [
                           {
