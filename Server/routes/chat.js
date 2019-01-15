@@ -200,27 +200,35 @@ router.post('/', function(req, res, next) {
                 var outString = '<오늘의 추천종목 TOP3>\n\n';
                 var i =1;
                 rows.forEach((row) => {
-                    //var sql2 = "SELECT * FROM utftable where code = ?"
-                    outString += "====================\n"
-                    outString += i.toString();
-                    outString += ". ";
-                    outString += row.code;
-                    outString += " : ";
-                    outString += row.increaseRate;
-                    outString += "% 상승예상\n"
-                    i++;
+                    var sql2 = "SELECT * FROM utftable where code = ?"
+                    var rate = row.increaseRate.toFixed(2);
+                    db.get(sql2, [row.code], (err, row)=>{
+                        console.log('row.name: '+row.name);
+                        outString += "====================\n"
+                        outString += i.toString();
+                        outString += ". ";
+                        outString += row.name;
+                        outString += " : ";
+                        outString += rate;
+                        outString += "% 상승예상\n"
+                        console.log('outstring: '+outString);
+                        i++;
+                        if(i==4){
+                            res.json({  "fulfillmentText": outString,
+                                "fulfillmentMessages": [
+                                {
+                                    "text": {
+                                    "text": [
+                                        outString
+                                    ]
+                                    }
+                                }
+                                ],});
+                        }
+                    });
+                    
                 });
-                console.log("outstring : " + outString);
-                res.json({  "fulfillmentText": outString,
-                        "fulfillmentMessages": [
-                          {
-                            "text": {
-                              "text": [
-                                outString
-                              ]
-                            }
-                          }
-                        ],});
+                
                 
                 
             }

@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "async": "^2.6.1",
     "cheerio": "^1.0.0-rc.2",
     "cheerio-httpcli": "^0.7.3",
     "child_process": "^1.0.2",
