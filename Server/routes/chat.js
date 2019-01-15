@@ -149,7 +149,7 @@ router.post('/', function(req, res, next) {
                 return console.error(err.message);
             }
             else{
-                var outString = '<증권 최신뉴스 Top3를 요약해서 알려드립니다>\n\n';
+                var outString = '<증권 최신뉴스 Top4를 요약해서 알려드립니다>\n\n';
                 var i =1;
                 rows.forEach((row) => {
                     outString += "====================\n"
@@ -179,6 +179,54 @@ router.post('/', function(req, res, next) {
             
         });
 
+    }
+    else if(action == 'recommendation_info'){
+        var dbPath = path.resolve('res', 'stocksUtf.db');
+        var db = new sqlite3.Database(dbPath ,(err) => {
+            if(err){
+                console.error(err.message);
+            }
+            else{
+                console.log('Connected to db!');
+            }
+            
+        });
+        let sql = "SELECT * FROM prediction WHERE increaseRate<15 ORDER BY increaseRate DESC LIMIT 3";
+        db.all(sql,  (err, rows) => {
+            if (err) {
+                return console.error(err.message);
+            }
+            else{
+                var outString = '<오늘의 추천종목 TOP3>\n\n';
+                var i =1;
+                rows.forEach((row) => {
+                    //var sql2 = "SELECT * FROM utftable where code = ?"
+                    outString += "====================\n"
+                    outString += i.toString();
+                    outString += ". ";
+                    outString += row.code;
+                    outString += " : ";
+                    outString += row.increaseRate;
+                    outString += "% 상승예상\n"
+                    i++;
+                });
+                console.log("outstring : " + outString);
+                res.json({  "fulfillmentText": outString,
+                        "fulfillmentMessages": [
+                          {
+                            "text": {
+                              "text": [
+                                outString
+                              ]
+                            }
+                          }
+                        ],});
+                
+                
+            }
+            
+            
+        });
     }
     
 });
