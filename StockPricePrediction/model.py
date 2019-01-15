@@ -15,7 +15,8 @@ import InsertDataBase
 valid_set_size_percentage = 10
 test_set_size_percentage = 10
 
-code = str(sys.argv[1])
+#code = str(sys.argv[1])
+code = "294870.KS"
 print('data/' + code + '.csv')
 
 directoryName = str("models/" + code)
@@ -51,7 +52,7 @@ print(maximum)
 
     
 
-'''
+
 plt.figure(figsize=(15, 5))
 plt.subplot(1,2,1)
 plt.plot(df['Open'], color='black', label='open')
@@ -71,7 +72,7 @@ plt.ylabel('volume')
 plt.legend(loc='best');
 
 plt.show()
-'''
+
 
 # function for min-max normalization of stock
 def normalize_data(df):
@@ -252,7 +253,7 @@ with tf.Session() as sess:
     y_real_prediction = sess.run(outputs, feed_dict={X: prediction_data})
 
     saver.save(sess, directoryName + './' + code)
-'''
+
 ft = 0 # 0 = open, 1 = close, 2 = highest, 3 = lowest
 
 ## show predictions
@@ -297,7 +298,7 @@ plt.xlabel('time [days]')
 plt.ylabel('normalized price')
 plt.legend(loc='best');
 plt.show()
-'''
+
 
 
 '''
@@ -321,6 +322,8 @@ result = []
 
 for i in range(5):
     result.append((maximum[i]-minimum[i]) * y_real_prediction[-1, i] + minimum[i])
+
+result.append(100 * (result[1] - lastData[3])/lastData[3])
 print(result)
 
 #plt.show()
